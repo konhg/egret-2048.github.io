@@ -13,6 +13,7 @@ var MainUI = (function (_super) {
     function MainUI() {
         var _this = _super.call(this) || this;
         _this.shape = new egret.Shape();
+        _this.textField = new egret.TextField();
         _this.cellArray = [];
         _this.lastX = 0;
         _this.lastY = 0;
@@ -26,12 +27,18 @@ var MainUI = (function (_super) {
             }
         }
         _this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, _this.onTouchBegin, _this);
-        _this.addEventListener(egret.TouchEvent.TOUCH_END, _this.onTouchEnd, _this);
+        // this.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancle, this);
         document.addEventListener("keydown", _this.onKeyup.bind(_this));
+        _this.addChild(_this.textField);
         return _this;
     }
     /**键盘事件 */
     MainUI.prototype.onKeyup = function (e) {
+        if (!this.istouch) {
+            return;
+        }
+        this.moveCount = 0;
+        this.istouch = false;
         switch (e.keyCode) {
             case 37://left
                 this.mergeAndMove("left");
@@ -50,12 +57,17 @@ var MainUI = (function (_super) {
                 break;
         }
     };
+    // private onTouchCancle(): void {
+    // 	this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+    // }
     MainUI.prototype.onTouchBegin = function (evt) {
         this.lastX = evt.stageX;
         this.lastY = evt.stageY;
+        this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
     };
     //判断滑动
     MainUI.prototype.onTouchEnd = function (evt) {
+        this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
         if (!this.istouch) {
             return;
         }
@@ -223,7 +235,7 @@ var MainUI = (function (_super) {
         }
         cellS = this.cellArray[sX][sY];
         this.cellArray[sX][sY] = null;
-        cellS.moveCell(this.pointX, this.pointY, tX, tY, isScore, false);
+        this.textField.text = "" + (Number(this.textField.text) + cellS.moveCell(this.pointX, this.pointY, tX, tY, isScore, false));
         if (cell.score != isScore) {
             this.cellArray[cell.arrI][cell.arrJ] = null;
             cell.moveCell(this.pointX, this.pointY, tX, tY, isScore, true);
@@ -239,6 +251,14 @@ var MainUI = (function (_super) {
         shape.graphics.endFill();
         this.pointX = 0 - (Main.widthBG / 2 - Main.spacing);
         this.pointY = 0 - (Main.heightBG / 2 - Main.spacing);
+        this.textField.width = this.stage.stageWidth;
+        this.textField.textAlign = egret.HorizontalAlign.CENTER;
+        this.textField.size = 70;
+        this.textField.y = 200;
+        this.textField.fontFamily = "HeiTi";
+        // this.textField.x = this.stage.width / 2 - this.textField.width / 2;
+        this.textField.textColor = 0x776e65;
+        this.textField.text = "0";
     };
     /**创建背景格子并随机创建格子 */
     MainUI.prototype.createCell = function () {

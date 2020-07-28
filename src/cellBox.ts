@@ -63,13 +63,15 @@ class cellBox extends eui.UILayer {
 			this.textField.text = "";
 		}
 	}
-	public moveCell(x, y, i, j, num: number, removethis: boolean): void {
+	public moveCell(x, y, i, j, num: number, removethis: boolean): number {
 		let ax = x + (this.cellWidth / 2) + (i * this.cellWidth + i * Main.spacing);
 		let ay = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
 		this.arrI = i;
 		this.arrJ = j;
+		var spacing: boolean;
+		spacing = this.score != num;
 		this.score = num;
-		egret.Tween.get(this).to({ x: ax, y: ay }, 300).call(() => {
+		egret.Tween.get(this).to({ x: ax, y: ay }, 200).call(() => {
 			var shape: egret.Shape = this.shape;
 			shape.graphics.clear();
 			shape.graphics.beginFill(this.cellColor[this.score].bg);
@@ -88,6 +90,12 @@ class cellBox extends eui.UILayer {
 			// egret.Tween.get(this).to({ scaleX: 1.3, scaleY: 1.3 }, 100).to({ scaleX: 1, scaleY: 1 }, 1)
 			// }
 		}, this)
+
+		if (spacing) {
+			return this.score;
+		} else {
+			return 0;
+		}
 	}
 	public removeCell(): void {
 		this.shape.graphics.clear();

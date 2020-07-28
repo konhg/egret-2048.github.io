@@ -1,5 +1,6 @@
 class MainUI extends eui.UILayer {
 	private shape: egret.Shape = new egret.Shape();
+	private textField: egret.TextField = new egret.TextField();
 	private cellArray: cellBox[][] = [];
 	private pointX: number;
 	private pointY: number;
@@ -17,10 +18,12 @@ class MainUI extends eui.UILayer {
 			}
 		}
 		this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-		this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+		// this.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancle, this);
 		document.addEventListener("keydown", this.onKeyup.bind(this));
+		this.addChild(this.textField);
 
 	}
+
 	/**键盘事件 */
 	public onKeyup(e: KeyboardEvent): void {
 		if (!this.istouch) {
@@ -46,12 +49,17 @@ class MainUI extends eui.UILayer {
 				break;
 		}
 	}
+	// private onTouchCancle(): void {
+	// 	this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
+	// }
 	private onTouchBegin(evt: egret.TouchEvent): void {
 		this.lastX = evt.stageX;
 		this.lastY = evt.stageY;
+		this.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
 	}
 	//判断滑动
 	private onTouchEnd(evt: egret.TouchEvent): void {
+		this.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
 		if (!this.istouch) {
 			return;
 		}
@@ -212,7 +220,7 @@ class MainUI extends eui.UILayer {
 		}
 		cellS = this.cellArray[sX][sY];
 		this.cellArray[sX][sY] = null;
-		cellS.moveCell(this.pointX, this.pointY, tX, tY, isScore, false);
+		this.textField.text = "" + (Number(this.textField.text) + cellS.moveCell(this.pointX, this.pointY, tX, tY, isScore, false));
 		if (cell.score != isScore) {
 			this.cellArray[cell.arrI][cell.arrJ] = null
 			cell.moveCell(this.pointX, this.pointY, tX, tY, isScore, true);
@@ -230,7 +238,14 @@ class MainUI extends eui.UILayer {
 		shape.graphics.endFill();
 		this.pointX = 0 - (Main.widthBG / 2 - Main.spacing);
 		this.pointY = 0 - (Main.heightBG / 2 - Main.spacing)
-
+		this.textField.width = this.stage.stageWidth;
+		this.textField.textAlign = egret.HorizontalAlign.CENTER;
+		this.textField.size = 70;
+		this.textField.y = 200;
+		this.textField.fontFamily = "HeiTi";
+		// this.textField.x = this.stage.width / 2 - this.textField.width / 2;
+		this.textField.textColor = 0x776e65;
+		this.textField.text = "0"
 	}
 	/**创建背景格子并随机创建格子 */
 	public createCell(): void {

@@ -80,8 +80,10 @@ var cellBox = (function (_super) {
         var ay = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
         this.arrI = i;
         this.arrJ = j;
+        var spacing;
+        spacing = this.score != num;
         this.score = num;
-        egret.Tween.get(this).to({ x: ax, y: ay }, 300).call(function () {
+        egret.Tween.get(this).to({ x: ax, y: ay }, 200).call(function () {
             var shape = _this.shape;
             shape.graphics.clear();
             shape.graphics.beginFill(_this.cellColor[_this.score].bg);
@@ -100,6 +102,12 @@ var cellBox = (function (_super) {
             // egret.Tween.get(this).to({ scaleX: 1.3, scaleY: 1.3 }, 100).to({ scaleX: 1, scaleY: 1 }, 1)
             // }
         }, this);
+        if (spacing) {
+            return this.score;
+        }
+        else {
+            return 0;
+        }
     };
     cellBox.prototype.removeCell = function () {
         this.shape.graphics.clear();
