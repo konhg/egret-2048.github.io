@@ -23,6 +23,11 @@ class MainUI extends eui.UILayer {
 	}
 	/**键盘事件 */
 	public onKeyup(e: KeyboardEvent): void {
+		if (!this.istouch) {
+			return;
+		}
+		this.moveCount = 0;
+		this.istouch = false;
 		switch (e.keyCode) {
 			case 37://left
 				this.mergeAndMove("left");
@@ -95,7 +100,7 @@ class MainUI extends eui.UILayer {
 			case "up":
 			case "right":
 				for (let i = this.cellArray.length; i > 0;) {
-					console.log(--i)
+					--i;
 					for (let j = 0; j < this.cellArray[i].length; j++) {
 						cell = this.cellArray[i][j];
 						if (cell) {
