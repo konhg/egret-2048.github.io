@@ -162,7 +162,9 @@ var Main = (function (_super) {
         });
     };
     Main.prototype.createGameScene = function () {
-        var mainUI = new MainUI();
+        Main.widthBG = (Main.horizontally + 1) * Main.cellWidth + ((Main.horizontally + 2) * Main.spacing);
+        Main.heightBG = (Main.landscape + 1) * Main.cellHeight + ((Main.landscape + 2) * Main.spacing);
+        var mainUI = new MainUI(this);
         this.addChild(mainUI);
         mainUI.createBg();
         mainUI.createCell();
@@ -275,9 +277,9 @@ var Main = (function (_super) {
     /**格子背景高 */
     Main.heightBG = 500;
     /**格子横排数量 */
-    Main.horizontally = 3;
+    Main.horizontally = 6;
     /**格子竖排数量 */
-    Main.landscape = 3;
+    Main.landscape = 6;
     /**格子宽 */
     Main.cellWidth = 106;
     /**格子高 */

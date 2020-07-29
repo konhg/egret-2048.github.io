@@ -13,15 +13,55 @@ class cellBox extends egret.Sprite {
 		"128": { "num": 128, "color": 0xfff7eb, "bg": 0xedce71, "size": 60 },
 		"256": { "num": 256, "color": 0xfff7eb, "bg": 0xedcc61, "size": 60 },
 		"512": { "num": 512, "color": 0xfff7eb, "bg": 0xecc850, "size": 60 },
-		"1024": { "num": 1024, "color": 0xfff7eb, "bg": 0xedc53f, "size": 50 },
-		"2048": { "num": 2048, "color": 0xfff7eb, "bg": 0xeec22e, "size": 50 },
-		"4096": { "num": 4096, "color": 0xfff7eb, "bg": 0x3d3a33, "size": 50 },
-		"8192": { "num": 8192, "color": 0xfff7eb, "bg": 0x0c0b0a, "size": 50 },
-		"16384": { "num": 16384, "color": 0xfff7eb, "bg": 0x0fbcbc, "size": 40 },
+		"1024": { "num": 1024, "color": 0xfff7eb, "bg": 0xedc53f, "size": 45 },
+		"2048": { "num": 2048, "color": 0xfff7eb, "bg": 0xeec22e, "size": 45 },
+		"4096": { "num": 4096, "color": 0xfff7eb, "bg": 0x3d3a33, "size": 45 },
+		"8192": { "num": 8192, "color": 0xfff7eb, "bg": 0x0c0b0a, "size": 45 },
+		"16384": { "num": 16384, "color": 0xfff7eb, "bg": 0x0fbcbc, "size": 35 },
+		"32768": { "num": 32768, "color": 0xffffff, "bg": 0x0000ff, "size": 35 },
+		"65536": { "num": 65536, "color": 0x000000, "bg": 0x00ffff, "size": 35 },
+		"131072": { "num": 131072, "color": 0xcc0000, "bg": 0x66ff66, "size": 30 },
+		"262144": { "num": 262144, "color": 0xcc0000, "bg": 0x66FF00, "size": 30 },
+		"524288": { "num": 524288, "color": 0x00ff00, "bg": 0xff00ff, "size": 30 },
+		"1048576": { "num": 1048576, "color": 0x00ff00, "bg": 0xFF0000, "size": 30 },
+		"2097152": { "num": 2097152, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"4194304": { "num": 4194304, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"8388608": { "num": 8388608, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"16777216": { "num": 16777216, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"33554432": { "num": 33554432, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"67108864": { "num": 67108864, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"134217728": { "num": 134217728, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"268435456": { "num": 268435456, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"536870912": { "num": 536870912, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"1073741824": { "num": 1073741824, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"2147483648": { "num": 2147483648, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"4294967296": { "num": 4294967296, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"8589934592": { "num": 8589934592, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"17179869184": { "num": 17179869184, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"34359738368": { "num": 34359738368, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"68719476736": { "num": 68719476736, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"137438953472": { "num": 137438953472, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"274877906944": { "num": 274877906944, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"549755813888": { "num": 549755813888, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"1099511627776": { "num": 1099511627776, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"2199023255552": { "num": 2199023255552, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"4398046511104": { "num": 4398046511104, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"8796093022208": { "num": 8796093022208, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"17592186044416": { "num": 17592186044416, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"35184372088832": { "num": 35184372088832, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"70368744177664": { "num": 70368744177664, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"140737488355328": { "num": 140737488355328, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"281474976710656": { "num": 281474976710656, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"562949953421312": { "num": 562949953421312, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"1125899906842624": { "num": 1125899906842624, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"2251799813685248": { "num": 2251799813685248, "color": 0xffffff, "bg": 0x000000, "size": 30 },
+		"4503599627370496": { "num": 4503599627370496, "color": 0xffffff, "bg": 0x000000, "size": 30 },
 	}
 	public score: number = 0;
 	public arrI: number;
 	public arrJ: number;
+	public pointX: number;
+	public pointY: number;
 	public constructor() {
 		super();
 		this.width = (Main.cellWidth);
@@ -42,9 +82,12 @@ class cellBox extends egret.Sprite {
 		this.textField.text = "";
 	}
 	public create(x, y, i, j, num: number): void {
+		this.name = num + "";
 		var shape: egret.Shape = this.shape;
 		this.arrI = i;
 		this.arrJ = j;
+		this.pointX = x;
+		this.pointY = y;
 		this.score = num;
 		shape.graphics.beginFill(this.cellColor[this.score].bg);
 		shape.graphics.lineStyle(2, this.cellColor[this.score].bg);
@@ -55,8 +98,8 @@ class cellBox extends egret.Sprite {
 		shape.anchorOffsetX = Main.cellWidth >> 1;
 		shape.anchorOffsetY = Main.cellHeight >> 1;
 
-		this.x = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
-		this.y = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
+		this.x = this.pointX + (Main.cellWidth / 2) + (this.arrI * Main.cellWidth + this.arrI * Main.spacing);
+		this.y = this.pointY + (Main.cellHeight / 2) + (this.arrJ * Main.cellHeight + this.arrJ * Main.spacing);
 		this.textField.x = 0//(this.width >> 1);
 		this.textField.y = 0//(this.height >> 1);
 		if (this.score > 0) {
@@ -70,10 +113,13 @@ class cellBox extends egret.Sprite {
 		}
 	}
 	public moveCell(x, y, i, j, num: number, removethis: boolean): number {
+		this.name = num + "";
 		let ax = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
 		let ay = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
 		this.arrI = i;
 		this.arrJ = j;
+		this.pointX = x;
+		this.pointY = y;
 		var spacing: boolean;
 		spacing = this.score != num;
 		this.score = num;
@@ -103,6 +149,31 @@ class cellBox extends egret.Sprite {
 			return 0;
 		}
 	}
+	// public refresh(): void {
+	// 	var shape: egret.Shape = this.shape;
+	// 	shape.graphics.beginFill(this.cellColor[this.score].bg);
+	// 	shape.graphics.lineStyle(2, this.cellColor[this.score].bg);
+	// 	shape.graphics.drawRoundRect(0, 0, Main.cellWidth, Main.cellHeight, Main.spacing);
+	// 	shape.graphics.endFill();
+	// 	shape.x = Main.cellWidth >> 1;
+	// 	shape.y = Main.cellHeight >> 1;
+	// 	shape.anchorOffsetX = Main.cellWidth >> 1;
+	// 	shape.anchorOffsetY = Main.cellHeight >> 1;
+
+	// 	this.x = this.pointX + (Main.cellWidth / 2) + (this.arrI * Main.cellWidth + this.arrI * Main.spacing);
+	// 	this.y = this.pointY + (Main.cellHeight / 2) + (this.arrJ * Main.cellHeight + this.arrJ * Main.spacing);
+	// 	this.textField.x = 0//(this.width >> 1);
+	// 	this.textField.y = 0//(this.height >> 1);
+	// 	if (this.score > 0) {
+	// 		this.textField.text = this.score + "";
+	// 		this.textField.textColor = this.cellColor[this.score].color;
+	// 		this.textField.size = this.cellColor[this.score].size;
+	// 		this.scaleX = this.scaleY = 0.3
+	// 		egret.Tween.get(this).to({ scaleX: 1, scaleY: 1 }, 180);
+	// 	} else {
+	// 		this.textField.text = "";
+	// 	}
+	// }
 	public removeCell(): void {
 		egret.Tween.removeTweens(this);
 		this.shape.graphics.clear();

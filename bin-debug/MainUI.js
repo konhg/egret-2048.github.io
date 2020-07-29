@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var MainUI = /** @class */ (function (_super) {
     __extends(MainUI, _super);
-    function MainUI() {
+    function MainUI(mian) {
         var _this = _super.call(this) || this;
         _this.shape = new egret.Shape();
         _this.textField = new egret.TextField();
@@ -22,6 +22,9 @@ var MainUI = /** @class */ (function (_super) {
         _this.lastY = 0;
         _this.istouch = true; //屏蔽连续点击
         _this.moveCount = 0; //大于0表示有格子移动
+        _this.lastCellArray = [];
+        _this.width = mian.stage.stageWidth;
+        _this.height = mian.stage.stageHeight;
         _this.addChild(_this.shape);
         for (var i = 0; i <= Main.horizontally; i++) {
             _this.cellArray[i] = [];
@@ -33,6 +36,7 @@ var MainUI = /** @class */ (function (_super) {
         // this.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancle, this);
         document.addEventListener("keydown", _this.onKeyup.bind(_this));
         _this.addChild(_this.textField);
+        _this.textField.y = ((mian.stage.stageHeight - Main.heightBG) >> 2) - 30;
         return _this;
     }
     /**键盘事件 */
@@ -55,9 +59,12 @@ var MainUI = /** @class */ (function (_super) {
             case 40: //down
                 this.mergeAndMove("down");
                 break;
+            case 90:
+                this.returnLast();
+                break;
             default:
                 this.istouch = true;
-                console.log("无效按键");
+                console.log("无效按键:" + e.keyCode);
                 break;
         }
     };
@@ -121,8 +128,45 @@ var MainUI = /** @class */ (function (_super) {
             }
         }
     };
+    /**撤销 */
+    MainUI.prototype.returnLast = function () {
+        if (this.lastCellArray.length <= 0) {
+            this.istouch = true;
+            return;
+        }
+        var arr = this.lastCellArray.pop();
+        for (var j = 0; j < arr.length; j++) { // 上下不等
+            for (var i = 0; i < arr[j].length; i++) {
+                if (this.cellArray[j][i]) {
+                    this.cellArray[j][i].removeCell();
+                }
+                this.cellArray[j][i] = null;
+                if (arr[j][i] > 0) {
+                    this.cellArray[j][i] = this.createcell(j, i, arr[j][i]);
+                }
+            }
+        }
+        arr = null;
+        this.istouch = true;
+    };
+    MainUI.prototype.pushlastArray = function (arr) {
+        var re = [];
+        for (var i = 0; i < arr.length; i++) {
+            re[i] = [];
+            for (var j = 0; j < arr[i].length; j++) {
+                if (arr[i][j]) {
+                    re[i].push(arr[i][j].score);
+                }
+                else {
+                    re[i].push(0);
+                }
+            }
+        }
+        this.lastCellArray.push(re);
+    };
     //按方向遍历列表列表
     MainUI.prototype.mergeAndMove = function (str) {
+        this.pushlastArray(this.cellArray);
         var cell;
         switch (str) {
             case "up":
@@ -265,7 +309,7 @@ var MainUI = /** @class */ (function (_super) {
         return false;
         ;
     };
-    //判断方向是否有
+    //判断方向无可移动
     MainUI.prototype.directionIsHave = function () {
         for (var i = 0; i < this.cellArray.length; i++) // 左右不等
             for (var j = 1; j < this.cellArray[i].length; j++) {
@@ -297,7 +341,6 @@ var MainUI = /** @class */ (function (_super) {
         this.textField.width = this.stage.stageWidth;
         this.textField.textAlign = egret.HorizontalAlign.CENTER;
         this.textField.size = 70;
-        this.textField.y = 200;
         this.textField.fontFamily = "HeiTi";
         // this.textField.x = this.stage.width / 2 - this.textField.width / 2;
         this.textField.textColor = 0x776e65;
@@ -314,22 +357,33 @@ var MainUI = /** @class */ (function (_super) {
         // this.testcreateBox();
     };
     MainUI.prototype.testcreateBox = function () {
-        this.cellArray[0][0] = this.createcell(0, 0, 2);
-        this.cellArray[0][1] = this.createcell(0, 1, 4);
-        this.cellArray[0][2] = this.createcell(0, 2, 2);
-        this.cellArray[0][3] = this.createcell(0, 3, 4);
-        this.cellArray[2][0] = this.createcell(2, 0, 2);
-        this.cellArray[2][1] = this.createcell(2, 1, 4);
-        this.cellArray[2][2] = this.createcell(2, 2, 2);
-        this.cellArray[2][3] = this.createcell(2, 3, 4);
-        this.cellArray[1][0] = this.createcell(1, 0, 4);
-        this.cellArray[1][1] = this.createcell(1, 1, 2);
-        this.cellArray[1][2] = this.createcell(1, 2, 4);
-        this.cellArray[1][3] = this.createcell(1, 3, 2);
-        this.cellArray[3][0] = this.createcell(3, 0, 4);
-        this.cellArray[3][1] = this.createcell(3, 1, 2);
-        this.cellArray[3][2] = this.createcell(3, 2, 4);
-        this.cellArray[3][3] = this.createcell(3, 3, 2);
+        var f = 2;
+        for (var j = 0; j < this.cellArray.length; j++) { // 上下不等
+            for (var i = 0; i < this.cellArray[j].length; i++) {
+                f *= 2;
+                this.cellArray[j][i] = this.createcell(j, i, f);
+            }
+        }
+        // this.cellArray[0][0] = this.createcell(0, 0, 2);
+        // this.cellArray[0][1] = this.createcell(0, 1, 4);
+        // this.cellArray[0][2] = this.createcell(0, 2, 8);
+        // this.cellArray[0][3] = this.createcell(0, 3, 16);
+        // this.cellArray[2][0] = this.createcell(2, 0, 32);
+        // this.cellArray[2][1] = this.createcell(2, 1, 64);
+        // this.cellArray[2][2] = this.createcell(2, 2, 128);
+        // this.cellArray[2][3] = this.createcell(2, 3, 256);
+        // this.cellArray[1][0] = this.createcell(1, 0, 512);
+        // this.cellArray[1][1] = this.createcell(1, 1, 1024);
+        // this.cellArray[1][2] = this.createcell(1, 2, 2048);
+        // this.cellArray[1][3] = this.createcell(1, 3, 4096);
+        // this.cellArray[3][0] = this.createcell(3, 0, 8192);
+        // this.cellArray[3][1] = this.createcell(3, 1, 16384);
+        // this.cellArray[3][2] = this.createcell(3, 2, 32768);
+        // this.cellArray[3][3] = this.createcell(3, 3, 65536);
+        // this.cellArray[3][4] = this.createcell(3, 4, 131072);
+        // this.cellArray[3][5] = this.createcell(3, 5, 262144);
+        // this.cellArray[4][5] = this.createcell(4, 5, 524288);
+        // this.cellArray[5][5] = this.createcell(5, 5, 1048576);
         this.isOver();
     };
     /**创建新格子 */
@@ -361,7 +415,6 @@ var MainUI = /** @class */ (function (_super) {
         var cell = new cellBox();
         this.addChild(cell);
         cell.create(this.pointX, this.pointY, x, y, score);
-        cell.name = score + "";
         return cell;
     };
     MainUI.prototype.getrandom = function (min, max) {

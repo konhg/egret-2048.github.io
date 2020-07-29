@@ -8,8 +8,11 @@ class MainUI extends eui.UILayer {
 	private lastY: number = 0;
 	private istouch: boolean = true;//屏蔽连续点击
 	private moveCount: number = 0;//大于0表示有格子移动
-	public constructor() {
+	private lastCellArray: any[] = [];
+	public constructor(mian: eui.UILayer) {
 		super();
+		this.width = mian.stage.stageWidth;
+		this.height = mian.stage.stageHeight;
 		this.addChild(this.shape);
 		for (let i = 0; i <= Main.horizontally; i++) {
 			this.cellArray[i] = [];
@@ -21,6 +24,7 @@ class MainUI extends eui.UILayer {
 		// this.addEventListener(egret.TouchEvent.TOUCH_CANCEL, this.onTouchCancle, this);
 		document.addEventListener("keydown", this.onKeyup.bind(this));
 		this.addChild(this.textField);
+		this.textField.y = ((mian.stage.stageHeight - Main.heightBG) >> 2) - 30;
 
 	}
 
@@ -44,9 +48,12 @@ class MainUI extends eui.UILayer {
 			case 40://down
 				this.mergeAndMove("down");
 				break;
+			case 90:
+				this.returnLast();
+				break;
 			default:
 				this.istouch = true;
-				console.log("无效按键");
+				console.log("无效按键:" + e.keyCode);
 				break;
 		}
 	}
@@ -103,8 +110,44 @@ class MainUI extends eui.UILayer {
 			}
 		}
 	}
+	/**撤销 */
+	private returnLast(): void {
+		if (this.lastCellArray.length <= 0) {
+			this.istouch = true;
+			return;
+		}
+		let arr: number[][] = this.lastCellArray.pop();
+		for (let j: number = 0; j < arr.length; j++) {// 上下不等
+			for (let i: number = 0; i < arr[j].length; i++) {
+				if (this.cellArray[j][i]) {
+					this.cellArray[j][i].removeCell();
+				}
+				this.cellArray[j][i] = null;
+				if (arr[j][i] > 0) {
+					this.cellArray[j][i] = this.createcell(j, i, arr[j][i]);
+				}
+			}
+		}
+		arr = null;
+		this.istouch = true;
+	}
+	private pushlastArray(arr: cellBox[][]): void {
+		let re = [];
+		for (let i = 0; i < arr.length; i++) {
+			re[i] = [];
+			for (let j = 0; j < arr[i].length; j++) {
+				if (arr[i][j]) {
+					re[i].push(arr[i][j].score)
+				} else {
+					re[i].push(0);
+				}
+			}
+		}
+		this.lastCellArray.push(re);
+	}
 	//按方向遍历列表列表
 	private mergeAndMove(str: string): void {
+		this.pushlastArray(this.cellArray);
 		let cell: cellBox;
 		switch (str) {
 			case "up":
@@ -246,7 +289,7 @@ class MainUI extends eui.UILayer {
 		}
 		return false;;
 	}
-	//判断方向是否有
+	//判断方向无可移动
 	private directionIsHave(): boolean {
 		for (let i: number = 0; i < this.cellArray.length; i++) // 左右不等
 			for (let j: number = 1; j < this.cellArray[i].length; j++) {
@@ -278,11 +321,10 @@ class MainUI extends eui.UILayer {
 		this.textField.width = this.stage.stageWidth;
 		this.textField.textAlign = egret.HorizontalAlign.CENTER;
 		this.textField.size = 70;
-		this.textField.y = 200;
 		this.textField.fontFamily = "HeiTi";
 		// this.textField.x = this.stage.width / 2 - this.textField.width / 2;
 		this.textField.textColor = 0x776e65;
-		this.textField.text = "0"
+		this.textField.text = "0";
 	}
 	/**创建背景格子并随机创建格子 */
 	public createCell(): void {
@@ -295,25 +337,36 @@ class MainUI extends eui.UILayer {
 		// this.testcreateBox();
 	}
 	private testcreateBox(): void {
-		this.cellArray[0][0] = this.createcell(0, 0, 2);
-		this.cellArray[0][1] = this.createcell(0, 1, 4);
-		this.cellArray[0][2] = this.createcell(0, 2, 2);
-		this.cellArray[0][3] = this.createcell(0, 3, 4);
+		let f = 2
+		for (let j: number = 0; j < this.cellArray.length; j++) {// 上下不等
+			for (let i: number = 0; i < this.cellArray[j].length; i++) {
+				f *= 2
+				this.cellArray[j][i] = this.createcell(j, i, f)
+			}
+		}
+		// this.cellArray[0][0] = this.createcell(0, 0, 2);
+		// this.cellArray[0][1] = this.createcell(0, 1, 4);
+		// this.cellArray[0][2] = this.createcell(0, 2, 8);
+		// this.cellArray[0][3] = this.createcell(0, 3, 16);
 
-		this.cellArray[2][0] = this.createcell(2, 0, 2);
-		this.cellArray[2][1] = this.createcell(2, 1, 4);
-		this.cellArray[2][2] = this.createcell(2, 2, 2);
-		this.cellArray[2][3] = this.createcell(2, 3, 4);
+		// this.cellArray[2][0] = this.createcell(2, 0, 32);
+		// this.cellArray[2][1] = this.createcell(2, 1, 64);
+		// this.cellArray[2][2] = this.createcell(2, 2, 128);
+		// this.cellArray[2][3] = this.createcell(2, 3, 256);
 
-		this.cellArray[1][0] = this.createcell(1, 0, 4);
-		this.cellArray[1][1] = this.createcell(1, 1, 2);
-		this.cellArray[1][2] = this.createcell(1, 2, 4);
-		this.cellArray[1][3] = this.createcell(1, 3, 2);
+		// this.cellArray[1][0] = this.createcell(1, 0, 512);
+		// this.cellArray[1][1] = this.createcell(1, 1, 1024);
+		// this.cellArray[1][2] = this.createcell(1, 2, 2048);
+		// this.cellArray[1][3] = this.createcell(1, 3, 4096);
 
-		this.cellArray[3][0] = this.createcell(3, 0, 4);
-		this.cellArray[3][1] = this.createcell(3, 1, 2);
-		this.cellArray[3][2] = this.createcell(3, 2, 4);
-		this.cellArray[3][3] = this.createcell(3, 3, 2);
+		// this.cellArray[3][0] = this.createcell(3, 0, 8192);
+		// this.cellArray[3][1] = this.createcell(3, 1, 16384);
+		// this.cellArray[3][2] = this.createcell(3, 2, 32768);
+		// this.cellArray[3][3] = this.createcell(3, 3, 65536);
+		// this.cellArray[3][4] = this.createcell(3, 4, 131072);
+		// this.cellArray[3][5] = this.createcell(3, 5, 262144);
+		// this.cellArray[4][5] = this.createcell(4, 5, 524288);
+		// this.cellArray[5][5] = this.createcell(5, 5, 1048576);
 		this.isOver();
 	}
 	/**创建新格子 */
@@ -343,8 +396,7 @@ class MainUI extends eui.UILayer {
 		let cell: cellBox = new cellBox();
 		this.addChild(cell);
 		cell.create(this.pointX, this.pointY, x, y, score);
-		cell.name = score + "";
-		return cell
+		return cell;
 	}
 	private getrandom(min: number, max: number): number {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
