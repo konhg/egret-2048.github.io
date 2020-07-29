@@ -102,13 +102,13 @@ class Main extends eui.UILayer {
     /**格子间距 */
     public static readonly spacing: number = 15;
     /**格子背景宽 */
-    public static readonly widthBG = 500;
+    public static readonly widthBG = 621;
     /**格子背景高 */
-    public static readonly heightBG = 500;
+    public static readonly heightBG = 621;
     /**格子横排数量 */
-    public static readonly horizontally = 3;
+    public static readonly horizontally = 4;
     /**格子竖排数量 */
-    public static readonly landscape = 3;
+    public static readonly landscape = 4;
     protected createGameScene(): void {
         let mainUI: MainUI = new MainUI();
         this.addChild(mainUI);

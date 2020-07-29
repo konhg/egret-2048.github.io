@@ -45,6 +45,7 @@ class MainUI extends eui.UILayer {
 				this.mergeAndMove("down");
 				break;
 			default:
+				this.istouch = true;
 				console.log("无效按键");
 				break;
 		}
