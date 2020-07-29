@@ -1,8 +1,7 @@
-class cellBox extends eui.UILayer {
+class cellBox extends egret.Sprite {
 	private shape: egret.Shape = new egret.Shape();
 	private textField: egret.TextField = new egret.TextField();
-	private cellWidth: number = 106;
-	private cellHeight: number = 106;
+
 	private cellColor: Object = {
 		"0": { "num": 0, "color": 0x7c736a, "bg": 0xcdc1b4, "size": 65 },
 		"2": { "num": 2, "color": 0x7c736a, "bg": 0xeee4da, "size": 65 },
@@ -25,14 +24,16 @@ class cellBox extends eui.UILayer {
 	public arrJ: number;
 	public constructor() {
 		super();
-		this.$setWidth(this.cellWidth);
-		this.$setHeight(this.cellHeight);
+		this.width = (Main.cellWidth);
+		this.height = (Main.cellHeight);
+		this.anchorOffsetX = Main.cellWidth >> 1;
+		this.anchorOffsetY = Main.cellHeight >> 1;
 		this.addChild(this.shape);
 		this.shape.touchEnabled = false;
 		this.addChild(this.textField);
 		this.textField.touchEnabled = false;
-		this.textField.width = this.width;
-		this.textField.height = this.height;
+		this.textField.width = Main.cellWidth;
+		this.textField.height = Main.cellHeight;
 		this.textField.bold = true;
 		this.textField.textAlign = egret.HorizontalAlign.CENTER;
 		this.textField.verticalAlign = egret.VerticalAlign.MIDDLE;
@@ -47,48 +48,53 @@ class cellBox extends eui.UILayer {
 		this.score = num;
 		shape.graphics.beginFill(this.cellColor[this.score].bg);
 		shape.graphics.lineStyle(2, this.cellColor[this.score].bg);
-		shape.graphics.drawRoundRect((this.stage.stageWidth >> 1) - this.cellWidth / 2, (this.stage.stageHeight >> 1) - this.cellHeight / 2, this.cellWidth, this.cellHeight, 15);
+		shape.graphics.drawRoundRect(0, 0, Main.cellWidth, Main.cellHeight, Main.spacing);
 		shape.graphics.endFill();
-		shape.x = 0;
-		shape.y = 0;
-		this.x = x + (this.cellWidth / 2) + (i * this.cellWidth + i * Main.spacing);
-		this.y = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
-		this.textField.x = (this.stage.stageWidth >> 1) - this.cellWidth / 2;
-		this.textField.y = (this.stage.stageHeight >> 1) - this.cellHeight / 2;
+		shape.x = Main.cellWidth >> 1;
+		shape.y = Main.cellHeight >> 1;
+		shape.anchorOffsetX = Main.cellWidth >> 1;
+		shape.anchorOffsetY = Main.cellHeight >> 1;
+
+		this.x = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
+		this.y = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
+		this.textField.x = 0//(this.width >> 1);
+		this.textField.y = 0//(this.height >> 1);
 		if (this.score > 0) {
 			this.textField.text = this.score + "";
 			this.textField.textColor = this.cellColor[this.score].color;
 			this.textField.size = this.cellColor[this.score].size;
+			this.scaleX = this.scaleY = 0.3
+			egret.Tween.get(this).to({ scaleX: 1, scaleY: 1 }, 180);
 		} else {
 			this.textField.text = "";
 		}
 	}
 	public moveCell(x, y, i, j, num: number, removethis: boolean): number {
-		let ax = x + (this.cellWidth / 2) + (i * this.cellWidth + i * Main.spacing);
-		let ay = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
+		let ax = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
+		let ay = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
 		this.arrI = i;
 		this.arrJ = j;
 		var spacing: boolean;
 		spacing = this.score != num;
 		this.score = num;
-		egret.Tween.get(this).to({ x: ax, y: ay }, 200).call(() => {
+		egret.Tween.get(this).to({ x: ax, y: ay }, 100).call(() => {
 			var shape: egret.Shape = this.shape;
 			shape.graphics.clear();
 			shape.graphics.beginFill(this.cellColor[this.score].bg);
 			shape.graphics.lineStyle(2, this.cellColor[this.score].bg);
-			shape.graphics.drawRoundRect((this.stage.stageWidth >> 1) - this.cellWidth / 2, (this.stage.stageHeight >> 1) - this.cellHeight / 2, this.cellWidth, this.cellHeight, 15);
+			shape.graphics.drawRoundRect(0, 0, Main.cellWidth, Main.cellHeight, 15);
 			shape.graphics.endFill();
 		}, this).call(() => {
 			if (removethis) {
 				this.removeCell();
 			}
 		}, this).call(() => {
-			// if (this.score != num) {
 			this.textField.text = this.score + "";
 			this.textField.textColor = this.cellColor[this.score].color;
 			this.textField.size = this.cellColor[this.score].size;
-			// egret.Tween.get(this).to({ scaleX: 1.3, scaleY: 1.3 }, 100).to({ scaleX: 1, scaleY: 1 }, 1)
-			// }
+			if (spacing) {
+				egret.Tween.get(this).to({ scaleX: 1.2, scaleY: 1.2 }, 180).to({ scaleX: 1, scaleY: 1 }, 1)
+			}
 		}, this)
 
 		if (spacing) {

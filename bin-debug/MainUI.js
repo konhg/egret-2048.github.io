@@ -1,17 +1,14 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var MainUI = /** @class */ (function (_super) {
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var MainUI = (function (_super) {
     __extends(MainUI, _super);
     function MainUI() {
         var _this = _super.call(this) || this;
@@ -43,16 +40,16 @@ var MainUI = /** @class */ (function (_super) {
         this.moveCount = 0;
         this.istouch = false;
         switch (e.keyCode) {
-            case 37: //left
+            case 37://left
                 this.mergeAndMove("left");
                 break;
-            case 38: //up
+            case 38://up
                 this.mergeAndMove("up");
                 break;
-            case 39: //right
+            case 39://right
                 this.mergeAndMove("right");
                 break;
-            case 40: //down
+            case 40://down
                 this.mergeAndMove("down");
                 break;
             default:
@@ -121,6 +118,7 @@ var MainUI = /** @class */ (function (_super) {
             }
         }
     };
+    //按方向遍历列表列表
     MainUI.prototype.mergeAndMove = function (str) {
         var cell;
         switch (str) {
@@ -155,6 +153,7 @@ var MainUI = /** @class */ (function (_super) {
             this.istouch = true;
         }
     };
+    /**判断移动合并加分的核心逻辑 */
     MainUI.prototype.getmergeAndMovecellList = function (cell, str) {
         var x = 0, y = 0, contraryx = 0, contraryy = 0;
         switch (str) {
@@ -246,6 +245,65 @@ var MainUI = /** @class */ (function (_super) {
         }
         this.cellArray[tX][tY] = cellS;
     };
+    /**判断结束 */
+    MainUI.prototype.isOver = function () {
+        if (this.directionIsHave()) {
+            var over = new egret.TextField();
+            over.width = this.stage.stageWidth;
+            over.height = this.stage.stageHeight;
+            over.textAlign = egret.HorizontalAlign.CENTER;
+            over.verticalAlign = egret.VerticalAlign.MIDDLE;
+            over.size = 50;
+            over.textColor = 0xff0000;
+            over.text = "你已走投无路，请重新开始";
+            this.addChild(over);
+            return true;
+        }
+        return false;
+        ;
+        // let cell: cellBox;
+        // for (let i = 0; i < this.cellArray.length; i++) {
+        // 	for (let j = this.cellArray[i].length; j > 0;) {
+        // 		cell = this.cellArray[i][--j];
+        // 		if (!cell) {
+        // 			return false;
+        // 		} else {
+        // 			if (this.directionIsHave(cell, 0, 1)) {
+        // 				break
+        // 			}
+        // 			if (this.directionIsHave(cell, 0, -1)) {
+        // 				return true;
+        // 			}
+        // 			if (this.directionIsHave(cell, 1, 0)) {
+        // 				return true;
+        // 			}
+        // 			if (this.directionIsHave(cell, -1, 0)) {
+        // 				return true;
+        // 			}
+        // 		}
+        // 	}
+        // }
+    };
+    //判断方向是否有
+    MainUI.prototype.directionIsHave = function () {
+        for (var i = 0; i < this.cellArray.length; i++)
+            for (var j = 1; j < this.cellArray[i].length; j++) {
+                if (!this.cellArray[i][j - 1] || !this.cellArray[i][j]) {
+                    return false;
+                }
+                if (this.cellArray[i][j].score == this.cellArray[i][j - 1].score)
+                    return false;
+            }
+        for (var j = 0; j < this.cellArray.length; j++)
+            for (var i = 1; i < this.cellArray[j].length; i++) {
+                if (!this.cellArray[i - 1][j] || !this.cellArray[i][j]) {
+                    return false;
+                }
+                if (this.cellArray[i][j].score == this.cellArray[i - 1][j].score)
+                    return false;
+            }
+        return true;
+    };
     /**创建背景*/
     MainUI.prototype.createBg = function () {
         var shape = this.shape;
@@ -253,8 +311,8 @@ var MainUI = /** @class */ (function (_super) {
         shape.graphics.lineStyle(2, 0x776e65);
         shape.graphics.drawRoundRect((this.stage.stageWidth >> 1) - Main.widthBG / 2, (this.stage.stageHeight >> 1) - Main.heightBG / 2, Main.widthBG, Main.heightBG, 30);
         shape.graphics.endFill();
-        this.pointX = 0 - (Main.widthBG / 2 - Main.spacing);
-        this.pointY = 0 - (Main.heightBG / 2 - Main.spacing);
+        this.pointX = ((this.stage.stageWidth - Main.widthBG) >> 1) + Main.spacing; //(Main.widthBG / 2 - Main.spacing);
+        this.pointY = ((this.stage.stageHeight - Main.heightBG) >> 1) + Main.spacing;
         this.textField.width = this.stage.stageWidth;
         this.textField.textAlign = egret.HorizontalAlign.CENTER;
         this.textField.size = 70;
@@ -272,17 +330,31 @@ var MainUI = /** @class */ (function (_super) {
             }
         }
         this.createBox(2);
+        // this.testcreateBox();
     };
     MainUI.prototype.testcreateBox = function () {
         this.cellArray[0][0] = this.createcell(0, 0, 2);
         this.cellArray[0][1] = this.createcell(0, 1, 4);
-        // this.cellArray[0][2] = this.createcell(0, 2, 2);
-        this.cellArray[0][3] = this.createcell(0, 3, 2);
+        this.cellArray[0][2] = this.createcell(0, 2, 2);
+        this.cellArray[0][3] = this.createcell(0, 3, 4);
+        this.cellArray[2][0] = this.createcell(2, 0, 2);
+        this.cellArray[2][1] = this.createcell(2, 1, 4);
+        this.cellArray[2][2] = this.createcell(2, 2, 2);
+        this.cellArray[2][3] = this.createcell(2, 3, 4);
+        this.cellArray[1][0] = this.createcell(1, 0, 4);
+        this.cellArray[1][1] = this.createcell(1, 1, 2);
+        this.cellArray[1][2] = this.createcell(1, 2, 4);
+        this.cellArray[1][3] = this.createcell(1, 3, 2);
+        this.cellArray[3][0] = this.createcell(3, 0, 4);
+        this.cellArray[3][1] = this.createcell(3, 1, 2);
+        this.cellArray[3][2] = this.createcell(3, 2, 4);
+        this.cellArray[3][3] = this.createcell(3, 3, 2);
+        this.isOver();
     };
     /**创建新格子 */
-    MainUI.prototype.createBox = function (count, score) {
-        if (count === void 0) { count = 1; }
-        if (score === void 0) { score = 2; }
+    MainUI.prototype.createBox = function (count /*创建格子的数量*/, score /*创建格子的分数*/) {
+        if (count === void 0) { count = 1; } /*创建格子的数量*/
+        if (score === void 0) { score = 2; } /*创建格子的分数*/
         var cot = count, cell;
         while (cot > 0) {
             var x = this.getrandom(0, this.cellArray.length - 1);
@@ -291,13 +363,16 @@ var MainUI = /** @class */ (function (_super) {
             if (cell) {
                 if (cell.score == 0) {
                     cot--;
-                    this.cellArray[x][y] = this.createcell(x, y, 2);
+                    this.cellArray[x][y] = this.createcell(x, y, score);
                 }
             }
             else {
                 cot--;
-                this.cellArray[x][y] = this.createcell(x, y, 2);
+                this.cellArray[x][y] = this.createcell(x, y, score);
             }
+        }
+        if (this.isOver()) {
+            return;
         }
         this.istouch = true;
     };
@@ -313,3 +388,5 @@ var MainUI = /** @class */ (function (_super) {
     };
     return MainUI;
 }(eui.UILayer));
+__reflect(MainUI.prototype, "MainUI");
+//# sourceMappingURL=MainUI.js.map

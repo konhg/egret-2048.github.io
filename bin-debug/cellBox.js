@@ -1,24 +1,19 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var cellBox = /** @class */ (function (_super) {
+var __reflect = (this && this.__reflect) || function (p, c, t) {
+    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
+};
+var __extends = this && this.__extends || function __extends(t, e) { 
+ function r() { 
+ this.constructor = t;
+}
+for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
+r.prototype = e.prototype, t.prototype = new r();
+};
+var cellBox = (function (_super) {
     __extends(cellBox, _super);
     function cellBox() {
         var _this = _super.call(this) || this;
         _this.shape = new egret.Shape();
         _this.textField = new egret.TextField();
-        _this.cellWidth = 106;
-        _this.cellHeight = 106;
         _this.cellColor = {
             "0": { "num": 0, "color": 0x7c736a, "bg": 0xcdc1b4, "size": 65 },
             "2": { "num": 2, "color": 0x7c736a, "bg": 0xeee4da, "size": 65 },
@@ -37,14 +32,16 @@ var cellBox = /** @class */ (function (_super) {
             "16384": { "num": 16384, "color": 0xfff7eb, "bg": 0x0fbcbc, "size": 40 },
         };
         _this.score = 0;
-        _this.$setWidth(_this.cellWidth);
-        _this.$setHeight(_this.cellHeight);
+        _this.width = (Main.cellWidth);
+        _this.height = (Main.cellHeight);
+        _this.anchorOffsetX = Main.cellWidth >> 1;
+        _this.anchorOffsetY = Main.cellHeight >> 1;
         _this.addChild(_this.shape);
         _this.shape.touchEnabled = false;
         _this.addChild(_this.textField);
         _this.textField.touchEnabled = false;
-        _this.textField.width = _this.width;
-        _this.textField.height = _this.height;
+        _this.textField.width = Main.cellWidth;
+        _this.textField.height = Main.cellHeight;
         _this.textField.bold = true;
         _this.textField.textAlign = egret.HorizontalAlign.CENTER;
         _this.textField.verticalAlign = egret.VerticalAlign.MIDDLE;
@@ -60,18 +57,22 @@ var cellBox = /** @class */ (function (_super) {
         this.score = num;
         shape.graphics.beginFill(this.cellColor[this.score].bg);
         shape.graphics.lineStyle(2, this.cellColor[this.score].bg);
-        shape.graphics.drawRoundRect((this.stage.stageWidth >> 1) - this.cellWidth / 2, (this.stage.stageHeight >> 1) - this.cellHeight / 2, this.cellWidth, this.cellHeight, 15);
+        shape.graphics.drawRoundRect(0, 0, Main.cellWidth, Main.cellHeight, Main.spacing);
         shape.graphics.endFill();
-        shape.x = 0;
-        shape.y = 0;
-        this.x = x + (this.cellWidth / 2) + (i * this.cellWidth + i * Main.spacing);
-        this.y = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
-        this.textField.x = (this.stage.stageWidth >> 1) - this.cellWidth / 2;
-        this.textField.y = (this.stage.stageHeight >> 1) - this.cellHeight / 2;
+        shape.x = Main.cellWidth >> 1;
+        shape.y = Main.cellHeight >> 1;
+        shape.anchorOffsetX = Main.cellWidth >> 1;
+        shape.anchorOffsetY = Main.cellHeight >> 1;
+        this.x = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
+        this.y = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
+        this.textField.x = 0; //(this.width >> 1);
+        this.textField.y = 0; //(this.height >> 1);
         if (this.score > 0) {
             this.textField.text = this.score + "";
             this.textField.textColor = this.cellColor[this.score].color;
             this.textField.size = this.cellColor[this.score].size;
+            this.scaleX = this.scaleY = 0.3;
+            egret.Tween.get(this).to({ scaleX: 1, scaleY: 1 }, 180);
         }
         else {
             this.textField.text = "";
@@ -79,31 +80,31 @@ var cellBox = /** @class */ (function (_super) {
     };
     cellBox.prototype.moveCell = function (x, y, i, j, num, removethis) {
         var _this = this;
-        var ax = x + (this.cellWidth / 2) + (i * this.cellWidth + i * Main.spacing);
-        var ay = y + (this.cellHeight / 2) + (j * this.cellHeight + j * Main.spacing);
+        var ax = x + (Main.cellWidth / 2) + (i * Main.cellWidth + i * Main.spacing);
+        var ay = y + (Main.cellHeight / 2) + (j * Main.cellHeight + j * Main.spacing);
         this.arrI = i;
         this.arrJ = j;
         var spacing;
         spacing = this.score != num;
         this.score = num;
-        egret.Tween.get(this).to({ x: ax, y: ay }, 200).call(function () {
+        egret.Tween.get(this).to({ x: ax, y: ay }, 100).call(function () {
             var shape = _this.shape;
             shape.graphics.clear();
             shape.graphics.beginFill(_this.cellColor[_this.score].bg);
             shape.graphics.lineStyle(2, _this.cellColor[_this.score].bg);
-            shape.graphics.drawRoundRect((_this.stage.stageWidth >> 1) - _this.cellWidth / 2, (_this.stage.stageHeight >> 1) - _this.cellHeight / 2, _this.cellWidth, _this.cellHeight, 15);
+            shape.graphics.drawRoundRect(0, 0, Main.cellWidth, Main.cellHeight, 15);
             shape.graphics.endFill();
         }, this).call(function () {
             if (removethis) {
                 _this.removeCell();
             }
         }, this).call(function () {
-            // if (this.score != num) {
             _this.textField.text = _this.score + "";
             _this.textField.textColor = _this.cellColor[_this.score].color;
             _this.textField.size = _this.cellColor[_this.score].size;
-            // egret.Tween.get(this).to({ scaleX: 1.3, scaleY: 1.3 }, 100).to({ scaleX: 1, scaleY: 1 }, 1)
-            // }
+            if (spacing) {
+                egret.Tween.get(_this).to({ scaleX: 1.2, scaleY: 1.2 }, 180).to({ scaleX: 1, scaleY: 1 }, 1);
+            }
         }, this);
         if (spacing) {
             return this.score;
@@ -119,4 +120,6 @@ var cellBox = /** @class */ (function (_super) {
         this.parent.removeChild(this);
     };
     return cellBox;
-}(eui.UILayer));
+}(egret.Sprite));
+__reflect(cellBox.prototype, "cellBox");
+//# sourceMappingURL=cellBox.js.map
