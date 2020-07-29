@@ -1,14 +1,17 @@
-var __reflect = (this && this.__reflect) || function (p, c, t) {
-    p.__class__ = c, t ? t.push(c) : t = [c], p.__types__ = p.__types__ ? t.concat(p.__types__) : t;
-};
-var __extends = this && this.__extends || function __extends(t, e) { 
- function r() { 
- this.constructor = t;
-}
-for (var i in e) e.hasOwnProperty(i) && (t[i] = e[i]);
-r.prototype = e.prototype, t.prototype = new r();
-};
-var MainUI = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var MainUI = /** @class */ (function (_super) {
     __extends(MainUI, _super);
     function MainUI() {
         var _this = _super.call(this) || this;
@@ -40,16 +43,16 @@ var MainUI = (function (_super) {
         this.moveCount = 0;
         this.istouch = false;
         switch (e.keyCode) {
-            case 37://left
+            case 37: //left
                 this.mergeAndMove("left");
                 break;
-            case 38://up
+            case 38: //up
                 this.mergeAndMove("up");
                 break;
-            case 39://right
+            case 39: //right
                 this.mergeAndMove("right");
                 break;
-            case 40://down
+            case 40: //down
                 this.mergeAndMove("down");
                 break;
             default:
@@ -153,7 +156,7 @@ var MainUI = (function (_super) {
             this.istouch = true;
         }
     };
-    /**判断移动合并加分的核心逻辑 */
+    /**判断移动合并的核心逻辑 */
     MainUI.prototype.getmergeAndMovecellList = function (cell, str) {
         var x = 0, y = 0, contraryx = 0, contraryy = 0;
         switch (str) {
@@ -261,32 +264,10 @@ var MainUI = (function (_super) {
         }
         return false;
         ;
-        // let cell: cellBox;
-        // for (let i = 0; i < this.cellArray.length; i++) {
-        // 	for (let j = this.cellArray[i].length; j > 0;) {
-        // 		cell = this.cellArray[i][--j];
-        // 		if (!cell) {
-        // 			return false;
-        // 		} else {
-        // 			if (this.directionIsHave(cell, 0, 1)) {
-        // 				break
-        // 			}
-        // 			if (this.directionIsHave(cell, 0, -1)) {
-        // 				return true;
-        // 			}
-        // 			if (this.directionIsHave(cell, 1, 0)) {
-        // 				return true;
-        // 			}
-        // 			if (this.directionIsHave(cell, -1, 0)) {
-        // 				return true;
-        // 			}
-        // 		}
-        // 	}
-        // }
     };
     //判断方向是否有
     MainUI.prototype.directionIsHave = function () {
-        for (var i = 0; i < this.cellArray.length; i++)
+        for (var i = 0; i < this.cellArray.length; i++) // 左右不等
             for (var j = 1; j < this.cellArray[i].length; j++) {
                 if (!this.cellArray[i][j - 1] || !this.cellArray[i][j]) {
                     return false;
@@ -294,7 +275,7 @@ var MainUI = (function (_super) {
                 if (this.cellArray[i][j].score == this.cellArray[i][j - 1].score)
                     return false;
             }
-        for (var j = 0; j < this.cellArray.length; j++)
+        for (var j = 0; j < this.cellArray.length; j++) // 上下不等
             for (var i = 1; i < this.cellArray[j].length; i++) {
                 if (!this.cellArray[i - 1][j] || !this.cellArray[i][j]) {
                     return false;
@@ -353,8 +334,8 @@ var MainUI = (function (_super) {
     };
     /**创建新格子 */
     MainUI.prototype.createBox = function (count /*创建格子的数量*/, score /*创建格子的分数*/) {
-        if (count === void 0) { count = 1; } /*创建格子的数量*/
-        if (score === void 0) { score = 2; } /*创建格子的分数*/
+        if (count === void 0) { count = 1; }
+        if (score === void 0) { score = 2; }
         var cot = count, cell;
         while (cot > 0) {
             var x = this.getrandom(0, this.cellArray.length - 1);
@@ -388,5 +369,3 @@ var MainUI = (function (_super) {
     };
     return MainUI;
 }(eui.UILayer));
-__reflect(MainUI.prototype, "MainUI");
-//# sourceMappingURL=MainUI.js.map

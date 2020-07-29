@@ -104,6 +104,7 @@ class cellBox extends egret.Sprite {
 		}
 	}
 	public removeCell(): void {
+		egret.Tween.removeTweens(this);
 		this.shape.graphics.clear();
 		this.removeChild(this.shape);
 		this.removeChild(this.textField);

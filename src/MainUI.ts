@@ -138,7 +138,7 @@ class MainUI extends eui.UILayer {
 			this.istouch = true;
 		}
 	}
-	/**判断移动合并加分的核心逻辑 */
+	/**判断移动合并的核心逻辑 */
 	private getmergeAndMovecellList(cell: cellBox, str: string): void {
 		let x = 0, y = 0, contraryx = 0, contraryy = 0;
 		switch (str) {
@@ -225,7 +225,7 @@ class MainUI extends eui.UILayer {
 		this.cellArray[sX][sY] = null;
 		this.textField.text = "" + (Number(this.textField.text) + cellS.moveCell(this.pointX, this.pointY, tX, tY, isScore, false));
 		if (cell.score != isScore) {
-			this.cellArray[cell.arrI][cell.arrJ] = null
+			this.cellArray[cell.arrI][cell.arrJ] = null;
 			cell.moveCell(this.pointX, this.pointY, tX, tY, isScore, true);
 		}
 		this.cellArray[tX][tY] = cellS;
@@ -245,28 +245,6 @@ class MainUI extends eui.UILayer {
 			return true;
 		}
 		return false;;
-		// let cell: cellBox;
-		// for (let i = 0; i < this.cellArray.length; i++) {
-		// 	for (let j = this.cellArray[i].length; j > 0;) {
-		// 		cell = this.cellArray[i][--j];
-		// 		if (!cell) {
-		// 			return false;
-		// 		} else {
-		// 			if (this.directionIsHave(cell, 0, 1)) {
-		// 				break
-		// 			}
-		// 			if (this.directionIsHave(cell, 0, -1)) {
-		// 				return true;
-		// 			}
-		// 			if (this.directionIsHave(cell, 1, 0)) {
-		// 				return true;
-		// 			}
-		// 			if (this.directionIsHave(cell, -1, 0)) {
-		// 				return true;
-		// 			}
-		// 		}
-		// 	}
-		// }
 	}
 	//判断方向是否有
 	private directionIsHave(): boolean {

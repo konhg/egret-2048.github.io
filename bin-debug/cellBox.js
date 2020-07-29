@@ -114,6 +114,7 @@ var cellBox = (function (_super) {
         }
     };
     cellBox.prototype.removeCell = function () {
+        egret.Tween.removeTweens(this);
         this.shape.graphics.clear();
         this.removeChild(this.shape);
         this.removeChild(this.textField);
